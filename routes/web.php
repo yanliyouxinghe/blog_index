@@ -26,8 +26,7 @@ Route::post('/logindo','Index\LoginController@logindo');
 Route::get('/logout','Index\LoginController@logout');
 Route::get('/particulars/{id}','Index\PartController@particulars');
 Route::get('/getattrprice','Index\PartController@getattrprice');
-
-
+Route::get('/list/{id}','Index\ListController@index');
 
 
 

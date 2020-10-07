@@ -41,5 +41,27 @@ class GoodsModel extends Model
             return $love;
         }
 
+        //商品列表
+        public function getgoodsdata($id)
+        {
+               $data = self::where('cat_id',$id)->paginate(10);
+               return $data;
+        }
+
+
+        //品牌
+        public function getbrand($id)
+        {
+               $brand = self::where('cat_id',$id)->pluck('brand_id');
+               return $brand->toArray();
+        }
+
+
+        //价格区间
+        public function getmaxprice($ids)
+        {
+                $shop_price = self::where('cat_id',$ids)->max('shop_price');
+                return $shop_price;
+        }
 
 }
