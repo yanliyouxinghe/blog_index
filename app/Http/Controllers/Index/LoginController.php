@@ -128,6 +128,9 @@ class LoginController extends Controller
 
                 session(['user_plone' => $u['user_plone'],'user_id' => $u['user_id'],'user_name' => $u['user_name']]);
                 $request->session()->save();
+                if($request['refer']){
+                    return redirect($request['refer']);die;
+                }
                 return redirect('/');die;
             }
             echo "<script>alert('操作繁忙..');location.href='/login'</script>";die;

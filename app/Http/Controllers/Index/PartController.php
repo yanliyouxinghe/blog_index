@@ -8,6 +8,7 @@ use App\Model\GoodsModel;
 use App\Model\GalleryModel;
 use App\Model\GoodsAttr;
 use App\Model\Attribute;
+use App\Model\ProductModel;
 class PartController extends Controller
 {
     public function particulars($id){
@@ -22,6 +23,8 @@ class PartController extends Controller
         $jianjie = $this->jianjie($id);
         //规格
         $guige = $this->guige($id);
+        
+       
         // dd($guige);
         return view('Index.index.part',['goods'=>$goods,'gallery'=>$gallery,'attr'=>$attr,'jianjie'=>$jianjie,'guige'=>$guige]);
     }      
@@ -83,4 +86,39 @@ class PartController extends Controller
         return json_encode(['code'=>0,'msg'=>'OK','data'=>$end_price]);
         // dd($end_price);
      }
+
+         public function putgoodsnum($goods_id){
+                $aa = GoodsModel::select('goods_id','goods_number')
+                ->where('goods_id',$goods_id)
+                ->first();
+        return $aa;
+         }
+
+
+         public function getgoodsattrnum(){
+            //获取货品存库
+            $goods_attr_id = request()->input('goods_attr_id');
+            $goods_attr_id = implode('|',$goods_attr_id );
+            // dd($goods_attr_id);
+            $goods_number = ProductModel::select('product_number')->where('goods_attr',$goods_attr_id)->first();
+               if($goods_number){
+                return json_encode(['code'=>'0','msg'=>'OK','data'=>$goods_number->product_number]);
+               }else{
+                 return json_encode(['code'=>'1','msg'=>'存库不足','data'=>'0']);
+               }
+         }
+
+         //获取商品存库
+         public function getgoodsnum(){
+            $goods_id = request()->input('goods_id');
+             $goods_num = GoodsModel::select('goods_number')->where('goods_id',$goods_id)->first();
+              if($goods_num){
+                 return json_encode(['code'=>'0','msg'=>'OK','data'=>$goods_num]);
+             }else{
+                 return json_encode(['code'=>'1','msg'=>'存库不足','data'=>'0']);
+
+             }
+         }
+
+
 }

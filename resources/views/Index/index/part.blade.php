@@ -185,7 +185,6 @@
 							</div>
 						</div>
 					</div>
-					<span>存库：{{$v->goods_number}}</span>
 					<div class="clearfix choose">
 						<div id="specification" class="summary-wrap clearfix">
                         @if($guige)
@@ -211,7 +210,8 @@
 								<div class="control-group">
 									<div class="controls">
 										<input autocomplete="off" type="text" value="1" minnum="1" class="itxt" />
-										<input type="hidden" name="num" value="">
+										<!-- <input type="hidden" name="num" value=""> -->
+										<input type="hidden" name="goods_number" value="" class="goods_number">
 										<a href="javascript:void(0)" class="increment plus">+</a>
 										<a href="javascript:void(0)" class="increment mins">-</a>
 									</div>
@@ -220,7 +220,7 @@
 							<div class="fl">
 								<ul class="btn-choose unstyled">
 									<li>
-										<a href="cart.html" target="_blank" class="sui-btn  btn-danger addshopcar">加入购物车</a>
+										<a href="javascript:void(0)" target="_blank"  class="sui-btn cat btn-danger addshopcar">加入购物车</a>
 									</li>
 								</ul>
 							</div>
@@ -736,7 +736,80 @@
 
 <script type="text/javascript" src="/static/js/plugins/jquery/jquery.min.js"></script>
 <script type="text/javascript">
+	$('.plus').click(function(){
+	  var goods_number = $('.goods_number').val();
+	  var buy_num = parseInt($('.itxt').val());
+	  $('.itxt').val('');
+	  if(buy_num+1 > goods_number){
+	  	alert('存库不足了');
+	  	$('.itxt').val(goods_number);
+	  }else{
+	  $('.itxt').val(buy_num+1);
+	  }
+	});
+
+	$('.mins').click(function(){
+	  var goods_number = $('.goods_number').val();
+	  var buy_num = parseInt($('.itxt').val());
+	  if(buy_num<=1){
+	  	alert('不能再少了哦');
+	  	$('.itxt').val('1');
+	  }else{
+	  	$('.itxt').val(buy_num-1);
+	  }
+	});
+
+	$('.itxt').blur(function(){
+	  var goods_number = $('.goods_number').val();
+	  var buy_num = parseInt($('.itxt').val());
+	  if(buy_num){
+	  		$('.itxt').val(buy_num)
+	  }else{
+	  	alert('请输入具体要购买的数量');
+	  	$('.itxt').val(1)
+	  }
+	  if(buy_num>goods_number){
+	  	alert('存库不足');
+		$('.itxt').val(goods_number)
+	  }
+	});
+
+		$('.cat').click(function(){
+			var goods_id = $('.goods_id').val();
+			var goods_attr_id = new Array();
+			$('.selected').each(function(i,k){
+				goods_attr_id.push($(this).attr('goods_attr_id'));
+			});
+			var buy_num = $('.itxt').val();
+			$.post('/cart',{'goods_id':goods_id,'goods_attr_id':goods_attr_id,'buy_num':buy_num},function(res){
+					if(res.code==1){
+						alert(res.mag);
+						location.href="/login?refer="+res.data;
+					}else{
+						$.ajax({
+							url : '/addcart',
+							dataType : 'json',
+							type : 'post',
+							data : {'goods_id':goods_id,'goods_attr_id':goods_attr_id,'buy_number':buy_num},
+							success:function(res){
+								if(res.code==0){
+									alert(res.mag);
+								}else{
+									alert(res.mag);
+								}
+							}
+						});
+					}
+			},'json');
+
+
+		});
+
+
 $(function(){
+	goodsnum();
+
+
 	$("#service").hover(function(){
 		$(".service").show();
 	},function(){
@@ -752,6 +825,7 @@ $(function(){
 		$(this).parent().siblings().find('a').removeClass('selected');
 		$(this).addClass('selected');
 		getEndprice();
+		goodsnum();
 	});
 
 	getEndprice();
@@ -769,9 +843,43 @@ $(function(){
 			return false;
 		}
 	}
-	
+});
 
-})
+
+	function goodsnum(){
+		var goods_attr_id = new Array();
+		var goods_id = $('.goods_id').val();
+		$('.selected').each(function(i){
+			goods_attr_id.push($(this).attr('goods_attr_id'));
+
+		});
+		if(!goods_id){
+			return false;
+		}
+		if(goods_attr_id.length){
+			$.post('/getgoodsattrnum',{'goods_attr_id':goods_attr_id},function(res){
+					if(res.code=='0'){
+						$('.goods_number').val('');
+						$('.goods_number').val(res.data);
+					}else{
+						$('.goods_number').val('');
+						$('.goods_number').val(res.data);
+					}
+		},'json');
+		}else{
+				$.post('/getgoodsnum',{'goods_id':goods_id},function(res){
+					if(res.code=='0'){
+						$('.goods_number').val('');
+						$('.goods_number').val(res.data['goods_number']);
+					}else{
+						$('.goods_number').val('');
+						$('.goods_number').val(res.data['goods_number']);
+					}
+		},'json');
+		}
+		
+	}
+
 </script>
 <script type="text/javascript" src="/static/js/model/cartModel.js"></script>
 <script type="text/javascript" src="/static/js/plugins/jquery.easing/jquery.easing.min.js"></script>

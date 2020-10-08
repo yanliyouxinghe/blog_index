@@ -27,6 +27,14 @@ Route::get('/logout','Index\LoginController@logout');
 Route::get('/particulars/{id}','Index\PartController@particulars');
 Route::get('/getattrprice','Index\PartController@getattrprice');
 Route::get('/list/{id}','Index\ListController@index');
+Route::post('/cart','Index\CartController@addcart');
+Route::post('/getgoodsattrnum','Index\PartController@getgoodsattrnum');
+Route::post('/getgoodsnum','Index\PartController@getgoodsnum');
+Route::post('/addcart','Index\CartController@addcart');
+
+
+
+
 
 
 
