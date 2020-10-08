@@ -148,8 +148,8 @@
 					<li class="active">智能手机</li>					
 				</ul>
 				<ul class="tags-choose">
-					<li class="tag">全网通<i class="sui-icon icon-tb-close"></i></li>
-					<li class="tag">63G<i class="sui-icon icon-tb-close"></i></li>
+					<li class="tag tag-brand_id" style="display: none;">全网通<i class="sui-icon icon-tb-close"></i></li>
+					<li class="tag" tag-price style="display: none;">63G<i class="sui-icon icon-tb-close"></i></li>
 				</ul>
 				<form class="fl sui-form form-dark">
 					<div class="input-control control-right">
@@ -161,17 +161,17 @@
 			</div>
 			<!--selector-->
 			<div class="clearfix selector">
-				<div class="type-wrap">
-					<div class="fl key">手机、数码、配件</div>
-					<div class="fl value"></div>
-					<div class="fl ext"></div>
-				</div>
+			
 				<div class="type-wrap logo">
 					<div class="fl key brand">品牌</div>
 					<div class="value logos">
-						<ul class="logo-list">
+						<ul class="logo-list search">
                             @foreach($brand as $v)
-							<li><img src="{{$v->brand_logo}}" brand_id="{{$v->brand_id}}" title="{{$v->brand_name}}" while="103" height="52"/></li>
+							<li  field="brand_id" value="{{$v->brand_id}}" title="{{$v->brand_name}}">
+                                <a href="javascript:void(0)" @if(isset($query['brand_id']) && $query['brand_id'] == $v->brand_id) class="redhover" @endif>
+                                    <img src="{{$v->brand_logo}}" brand_id="{{$v->brand_id}}" while="103" height="52"/>
+                                </a>
+                            </li>
 							@endforeach
 						</ul>
 					</div>
@@ -184,10 +184,10 @@
 				<div class="type-wrap">
 					<div class="fl key">价格</div>
 					<div class="fl value">
-						<ul class="type-list">
+						<ul class="type-list search">
 							@foreach($shop_poice as $v)
-							<li>
-								<a title="{{$v}}">{{$v}}</a>
+							<li field="price" value="{{$v}}" title="{{$v}}">
+								<a @if(isset($query['price']) && $query['price'] == $v) class="redhover" @endif >{{$v}}</a>
                             </li>
                             @endforeach
 						</ul>
@@ -226,19 +226,19 @@
 						<li class="yui3-u-1-5">
 							<div class="list-wrap">
 								<div class="p-img">
-									<img src="{{env('APP_URL').$v->goods_thumb}}" />
+									<a href="/particulars/{{$v->goods_id}}"><img src="{{env('APP_URL').$v->goods_thumb}}" /></a>
 								</div>
 								<div class="price">
 									<strong>
 											<em>¥</em>
-											<i>6088.00</i>
+											<i>{{$v->shop_price}}</i>
 										</strong>
 								</div>
 								<div class="attr">
-									<em>Apple苹果iPhone 6s (A1699)</em>
+									<em>{{$v->goods_name}}</em>
 								</div>
 								<div class="cu">
-									<em><span>促</span>满一件可参加超值换购</em>
+									<em>{{$v->goods_drief}}</em>
 								</div>
 								<div class="commit">
 									<i class="command">已有2000人评价</i>
@@ -647,7 +647,49 @@
 	<!--侧栏面板结束-->
 		<script type="text/javascript" src="/static/js/plugins/jquery/jquery.min.js"></script>
 		<script type="text/javascript">
-			$(function() {
+            $(function(){
+                $('.redhover').each(function(i,k){
+                    var s_key = $(this).parent().attr('field');
+                    var s_val = $(this).parent().attr('value');
+                    if(s_key=='brand_id'){
+                        var s_val = $(this).parent().attr('title');
+                    }
+                    $('.tag-'+s_key).text(s_val).show();
+                });
+            });
+
+
+
+
+
+                       
+                $('.search li').click(function(){
+                    $(this).siblings().find('a').removeClass('redhover');
+                    $(this).find('a').addClass('redhover');
+                    var search = '';
+                    $('.redhover').each(function(i,k){
+                        var s_key = $(this).parent().attr('field');
+                        var s_val = $(this).parent().attr('value');
+                        search += s_key+'='+s_val+'&';
+
+                    });
+                    // alert(search);
+                    var url = "{{$url}}";
+                    if(search){
+                        url = '?'+search.substring(0,search.length-1);
+                    // alert(url);
+                    location.href=url;
+                    }
+                   
+                });
+
+
+
+
+
+
+
+        	$(function() {
 				$("#service").hover(function() {
 					$(".service").show();
 				}, function() {
@@ -658,7 +700,6 @@
 				}, function() {
 					$("#shopcarlist").hide();
 				});
-
 			})
 		</script>
 		<script type="text/javascript" src="/static/js/model/cartModel.js"></script>

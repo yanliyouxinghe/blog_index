@@ -20,5 +20,6 @@ class CategoryModel extends Model
 				$catedata = self::get();
 				return $catedata;
 				}
+				
 		
 }

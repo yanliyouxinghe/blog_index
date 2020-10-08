@@ -42,9 +42,9 @@ class GoodsModel extends Model
         }
 
         //商品列表
-        public function getgoodsdata($id)
+        public function getgoodsdata($id,$wheres)
         {
-               $data = self::where('cat_id',$id)->paginate(10);
+               $data = self::where($wheres)->whereIn('cat_id',$id)->paginate(10);
                return $data;
         }
 
@@ -52,8 +52,8 @@ class GoodsModel extends Model
         //品牌
         public function getbrand($id)
         {
-               $brand = self::where('cat_id',$id)->pluck('brand_id');
-               return $brand->toArray();
+               $brand = self::whereIn('cat_id',$id)->pluck('brand_id');
+               return $brand;
         }
 
 
