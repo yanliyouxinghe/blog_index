@@ -781,25 +781,18 @@
 				goods_attr_id.push($(this).attr('goods_attr_id'));
 			});
 			var buy_num = $('.itxt').val();
-			$.post('/cart',{'goods_id':goods_id,'goods_attr_id':goods_attr_id,'buy_num':buy_num},function(res){
+			// alert(buy_num);
+			$.post('/cart',{'goods_id':goods_id,'goods_attr_id':goods_attr_id,'buy_number':buy_num},function(res){
 					if(res.code==1){
 						alert(res.mag);
-						location.href="/login?refer="+res.data;
+						location.href="/login?refer="+location.href;
+					}else if(res.code==0){
+						alert('加入购物车成功');
+						location.href='/cartlist';
 					}else{
-						$.ajax({
-							url : '/addcart',
-							dataType : 'json',
-							type : 'post',
-							data : {'goods_id':goods_id,'goods_attr_id':goods_attr_id,'buy_number':buy_num},
-							success:function(res){
-								if(res.code==0){
-									alert(res.mag);
-								}else{
-									alert(res.mag);
-								}
-							}
-						});
+						alert(res.mag);
 					}
+
 			},'json');
 
 
@@ -808,7 +801,6 @@
 
 $(function(){
 	goodsnum();
-
 
 	$("#service").hover(function(){
 		$(".service").show();

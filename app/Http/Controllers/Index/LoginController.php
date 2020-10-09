@@ -109,8 +109,10 @@ class LoginController extends Controller
 
     //执行登录
     public function logindo(Request $request){
+
         $user_name = request()->input('user_name');
         $user_pwd = request()->input('user_pwd');
+
         if(empty($user_name) || empty($user_pwd)){
             echo "<script>alert('用户名或密码不能为空');location.href='/login'</script>";die;
         }
@@ -128,7 +130,8 @@ class LoginController extends Controller
 
                 session(['user_plone' => $u['user_plone'],'user_id' => $u['user_id'],'user_name' => $u['user_name']]);
                 $request->session()->save();
-                if($request['refer']){
+                
+                if(request()->refer){
                     return redirect($request['refer']);die;
                 }
                 return redirect('/');die;

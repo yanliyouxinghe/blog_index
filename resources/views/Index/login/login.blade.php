@@ -55,7 +55,7 @@
 									<label class="checkbox inline">
           <input name="m1" type="checkbox" value="2" checked=""> 
           自动登录
-        </label>
+        </label>                   <input type='hidden' name='refer' value="{{request()->refer}}"/>
 									<span class="forget">忘记密码？</span>
 								</div>
 								<div class="logined">
