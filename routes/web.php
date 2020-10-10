@@ -35,6 +35,9 @@ Route::get('/cartlist','Index\CartController@cartlist');
 Route::get('/getendprice','Index\CartController@getendprice');
 Route::get('/address','Index\AddressController@address');
 Route::get('/getsondata','Index\AddressController@getsondata');
+Route::post('/add_ress','Index\AddressController@profile');
+
+
 
 
 

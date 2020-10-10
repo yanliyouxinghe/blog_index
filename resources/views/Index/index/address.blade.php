@@ -65,30 +65,16 @@
 					<div class="addressInfo">
 						<ul class="addr-detail">
 							<li class="addr-item">
-							
+								@foreach($addressData as $v)
 							  <div>
-								<div class="con name selected"><a href="javascript:;" >张默<span title="点击取消选择">&nbsp;</a></div>
-								<div class="con address">张默 北京市海淀区三环内 中关村软件园9号楼 <span>159****3201</span>
-									<span class="base">默认地址</span>
+								<div class="con name"><a href="javascript:;" >{{$v->address_name}}<span title="点击取消选择">&nbsp;</a></div>
+								<div class="con address">{{$v->address_name}} {{$v->province}} {{$v->city}} {{$v->district}} {{$v->address}} <span>{{$v->tel}}</span>
+									<!-- <span class="base">默认地址</span> -->
 									<span class="edittext"><a data-toggle="modal" data-target=".edit" data-keyboard="false" >编辑</a>&nbsp;&nbsp;<a href="javascript:;">删除</a></span>
 								</div>
 								<div class="clearfix"></div>
 							  </div>
-							  <div>
-								<div class="con name"><a href="javascript:;">李煜<span title="点击取消选择">&nbsp;</a></div>
-								<div class="con address">李煜 北京市海淀区三环内 中关村软件园8号楼 <span>187****4201</span>
-								<span class="edittext"><a data-toggle="modal" data-target=".edit" data-keyboard="false" >编辑</a>&nbsp;&nbsp;<a href="javascript:;">删除</a></span>
-								</div>
-								<div class="clearfix"></div>
-							  </div>
-							  
-							  <div>
-								<div class="con name"><a href="javascript:;">王希<span title="点击取消选择">&nbsp;</a></div>
-								<div class="con address">王希 北京市海淀区三环内 中关村软件园6号楼  <span>156****5681</span>
-								<span class="edittext"><a data-toggle="modal" data-target=".edit" data-keyboard="false" >编辑</a>&nbsp;&nbsp;<a href="javascript:;">删除</a></span>
-								</div>
-								<div class="clearfix"></div>
-							  </div>
+								@endforeach
 							</li>
 							
 							
@@ -98,16 +84,18 @@
 						  <div class="modal-dialog">
 						    <div class="modal-content">
 						      <div class="modal-header">
+						      	 @if(count($address))
 						        <button type="button" data-dismiss="modal" aria-hidden="true" class="sui-close">×</button>
+						        @endif
 						        <h4 id="myModalLabel" class="modal-title">添加收货地址</h4>
 						      </div>
 						      <div class="modal-body">
-						      	<form action="" class="sui-form form-horizontal">
-						      		 <div class="control-group">
+						      	<form action="/add_ress" method="post" class="sui-form form-horizontal">
+								 <div class="control-group">
 									    <label class="control-label">收货人：</label>
 									    <div class="controls">
-									      <input type="text" class="input-medium">
-									    </div>
+									      <input type="text" title="收货人" name="address_name" class="input-medium address_name">
+									    </div> <span id="address_name"></span>
 									  </div>
 
 
@@ -117,7 +105,7 @@
                                             		<div class="controls">
                                          			<tr>
                  								 		<td colspan="3" align="left" bgcolor="#ffffff">
-								                  			<select name="country" id="selCountries_0">
+								                  			<select name="country" id="selCountries_0" class="country">
 
 								                      						<option value="0">请选择国家</option>
 								                      						@foreach($region as $v)
@@ -125,13 +113,13 @@
 								                                            @endforeach
 								                            </select>
 
-								                    		<select name="province" id="selProvinces_0">
+								                    		<select name="province" id="selProvinces_0" class="province">
 											                      <option value="0">请选择省</option>
 					                                        </select>
-								                    		<select name="city" id="selCities_0">
+								                    		<select name="city" id="selCities_0" class="city">
 								                     				 <option value="0">请选择市</option>
 								                      		</select>
-									                    	<select name="district" id="selDistricts_0">
+									                    	<select name="district" id="selDistricts_0" class="district">
 									                      				<option value="0">请选择区/县</option>	
                                          					</select>(必填) </td>
 											        </tr>
@@ -142,25 +130,25 @@
 									   <div class="control-group">
 									    <label class="control-label">详细地址：</label>
 									    <div class="controls">
-									      <input type="text" class="input-large">
-									    </div>
+									      <input type="text" title="详细地址" name="address" class="input-large address">
+									    </div><span id="address"></span>
 									  </div>
 									   <div class="control-group">
 									    <label class="control-label">联系电话：</label>
 									    <div class="controls">
-									      <input type="text" class="input-medium">
-									    </div>
+									      <input type="text" title="联系电话" name="tel" class="input-medium tel">
+									    </div><span id="tel"></span>
 									  </div>
 									   <div class="control-group">
 									    <label class="control-label">邮箱：</label>
 									    <div class="controls">
-									      <input type="text" class="input-medium">
-									    </div>
+									      <input type="email"  title="邮箱" name="email" class="input-medium email">
+									    </div><span id="email"></span>
 									  </div>
 									   <div class="control-group">
 									    <label class="control-label">地址别名：</label>
 									    <div class="controls">
-									      <input type="text" class="input-medium">
+									      <input type="text" title="地址别名" name="alias" class="input-medium">
 									    </div>
 									    <div class="othername">
 									    	建议填写常用地址：<a href="#" class="sui-btn btn-default">家里</a>　<a href="#" class="sui-btn btn-default">父母家</a>　<a href="#" class="sui-btn btn-default">公司</a>
@@ -172,8 +160,10 @@
 						      	
 						      </div>
 						      <div class="modal-footer">
-						        <button type="button" data-ok="modal" class="sui-btn btn-primary btn-large">确定</button>
+						        <button type="button" data-ok="modal"  class="sui-btn btn-primary btn-large">确定</button>
+						        @if(count($address))
 						        <button type="button" data-dismiss="modal" class="sui-btn btn-default btn-large">取消</button>
+						        @endif
 						      </div>
 						    </div>
 						  </div>
@@ -206,24 +196,28 @@
 								<div class="sendGoods">
 									
 									<ul class="yui3-g">
+										@foreach($cartData as $v)
 										<li class="yui3-u-1-6">
-											<span><img src="/static/img/goods.png"/></span>
+											<span><img src="{{env('APP_URL').$v->goods_thumb}}"/ width="100px" height="100px"></span>
 										</li>
 										<li class="yui3-u-7-12">
-											<div class="desc">Apple iPhone 6s (A1700) 64G 玫瑰金色 移动联通电信4G手机硅胶透明防摔软壳 本色系列</div>
+											<div class="desc">{{$v->goods_name}}</div>
 											<div class="seven">7天无理由退货</div>
 										</li>
 										<li class="yui3-u-1-12">
-											<div class="price">￥5399.00</div>
+											<div class="price">￥{{$v->shop_price}}</div>
 										</li>
 										<li class="yui3-u-1-12">
-											<div class="num">X1</div>
+											<div class="num">X{{$v->buy_number}}</div>
 										</li>
 										<li class="yui3-u-1-12">
 											<div class="exit">有货</div>
 										</li>
+										@endforeach
 									</ul>
+
 								</div>
+								
 							</li>
 							<li></li>
 							<li></li>
@@ -409,7 +403,7 @@
 <script type="text/javascript" src="/static/js/plugins/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="/static/js/plugins/jquery.easing/jquery.easing.min.js"></script>
 <script type="text/javascript" src="/static/js/plugins/sui/sui.min.js"></script>
-<script type="text/javascript" src="components/ui-modules/nav/nav-portal-top.js"></script>
+<!-- <script type="text/javascript" src="components/ui-modules/nav/nav-portal-top.js"></script> -->
 <script type="text/javascript" src="/static/js/pages/getOrderInfo.js"></script>
 </body>
 <script type="text/javascript">
@@ -420,7 +414,10 @@
 		$('sui-modal-backdrop').show();
 		$('.sui-modal').show();
 	});
+	@else
+	$('.sui-modal-backdrop').remove('div');
 	@endif
+
 
 	$('select').change(function(){
 		var _this = $(this);
@@ -432,7 +429,7 @@
 			 if(res.code=='0'){
 			 		 var address = res.data;
 			 // alert(address);
-			 		var str = '<option value="0">请选择==</option>';
+			 		var str = '<option value="0">请选择</option>';
 					 for (var i=0;i<address.length;i++) {
 					 		str += '<option value="'+address[i].region_id+'">'+address[i].region_name+'</option>';
 						 }
@@ -443,5 +440,78 @@
 		},'json');
 	});
 
-</script>>
+
+		var flag1 = false;
+		$('.address_name').blur(function(){
+			var address_name = $(this).val();
+			if(address_name == ''){
+				$('#address_name').css('color','red').html('收货人不能为空');
+				flag1 = false;
+			}else{
+				$('#address_name').css('color','red').html('');
+				flag1 = true;
+			}
+		});
+
+	
+		var flag2 = false;
+		$('.address').blur(function(){
+			var address = $(this).val();
+			if(address == ''){
+				$('#address').css('color','red').html('请填写详细地址');
+				flag2 = false;
+			}else{
+				$('#address').css('color','red').html('');
+				flag2 = true;
+			}
+		});
+
+	
+		var flag3 = false;
+		$('.email').blur(function(){
+			var email = $(this).val();
+			if(email == ''){
+				$('#email').css('color','red').html('请填写邮箱');
+				flag3 = false;
+			}else{
+				$('#email').css('color','red').html('');
+				flag3 = true;
+			}
+		});
+
+		var flag4 = false;
+		$('.tel').blur(function(){
+			var tel = $(this).val();
+
+			if(tel == ''){
+				$('#tel').css('color','red').html('请填写手机号码');
+				flag4 = false;
+			}else if(!(/^1(3|5|6|7|8|9)\d{9}$/.test(tel))){
+				$('#tel').css('color','red').html('请填写正确的手机号');
+				flag4 = false;
+			}else{
+				$('#tel').css('color','red').html('');
+				flag4 = true;
+			}
+		});
+        
+        $('.btn-primary').click(function(){
+        	var country = $('.country').val();
+        	var province = $('.province').val();
+        	var city = $('.city').val();
+        	var district = $('.district').val();
+
+
+        	if(flag1===false || flag2===false || flag3===false || flag4===false ){
+        		alert('缺少参数');
+        		return false;
+        	}else if(country=='0' || province=='0' || city=='0' ||district=='0'){
+        		alert('请选择收货位置');
+        		return false;
+        	}else{
+        		$('form').submit();
+        	}
+		});
+
+</script>
 </html>
